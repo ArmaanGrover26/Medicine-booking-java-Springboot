@@ -1,0 +1,118 @@
+/* Responsive container and section styles */
+@media (max-width: 1200px) {
+  .container {
+    max-width: 1000px;
+    padding: 32px 18px;
+  }
+  .section-title {
+    font-size: 2.1rem;
+  }
+}
+@media (max-width: 900px) {
+  .container {
+    max-width: 700px;
+    padding: 24px 8px;
+  }
+  .section-title {
+    font-size: 1.7rem;
+  }
+  .section-subtitle {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .container {
+    max-width: 98vw;
+    padding: 12px 2vw;
+  }
+  .section-title {
+    font-size: 1.3rem;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  .btn, .btn-primary {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+}
+/* General App styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f5f7;
+}
+
+.app-container {
+  display: flex; /* This is the key line to make the layout side-by-side */
+}
+
+
+:root {
+  --primary-blue: #007bff;
+  --primary-gradient: linear-gradient(90deg, #007bff, #00c6ff);
+  --text-dark: #343a40;
+  --text-light: #6c757d;
+  --background-white: #ffffff;
+  --border-color: #dee2e6;
+  --orange-bg: #f9a825;
+  --green-tag: #28a745;
+  --red-tag: #dc3545;
+}
+
+/* This is the key rule that will center your main content sections */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 30px; 
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 40px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.priority-text {
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Add these styles to your App.css file */
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1; /* This is the key fix! */
+}
