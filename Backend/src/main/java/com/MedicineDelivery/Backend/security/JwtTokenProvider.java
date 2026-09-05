@@ -2,7 +2,6 @@ package com.MedicineDelivery.Backend.security;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -20,28 +18,28 @@ public class JwtTokenProvider {
     private final Key key;
     private final long validityInMilliseconds = 3600000; // 1 hour
 
-    // This constructor now reads the secret key from your application.properties file
+    // Reads the secret key from application.properties
     public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String createToken(UserDetails userDetails) {
-        Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
-        
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
+        // FIX: Removed deprecated Jwts.claims() / setClaims() / SignatureAlgorithm.HS256.
+        // The algorithm is automatically inferred from the Key type (HMAC-SHA256).
         return Jwts.builder()
-            .setClaims(claims)
+            .setSubject(userDetails.getUsername())
             .setIssuedAt(now)
             .setExpiration(validity)
-            .signWith(key, SignatureAlgorithm.HS256) // Use a specific algorithm
+            .signWith(key)  // Algorithm inferred automatically from key — no SignatureAlgorithm needed
             .compact();
     }
 
     public String getUsername(String token) {
-        return getClaim(token, Claims::getSubject);
+        return getAllClaims(token).getSubject();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -54,11 +52,14 @@ public class JwtTokenProvider {
     }
 
     private Date getExpiration(String token) {
-        return getClaim(token, Claims::getExpiration);
+        return getAllClaims(token).getExpiration();
     }
 
-    private <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        return claimsResolver.apply(claims);
+    private Claims getAllClaims(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
     }
 }

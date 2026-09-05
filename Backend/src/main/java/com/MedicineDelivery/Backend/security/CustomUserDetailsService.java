@@ -1,8 +1,9 @@
 package com.MedicineDelivery.Backend.security;
 
+import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,19 +15,20 @@ import com.MedicineDelivery.Backend.repository.UserRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // This requires a findByEmail method in your UserRepository.
-        // If you don't have it, you'll need to add: Optional<User> findByEmail(String email);
+    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByEmail(email);
         
         User user = userOptional
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         
-        return new CustomUserDetails(user);
+        return new CustomUserDetails(Objects.requireNonNull(user));
     }
 }
 

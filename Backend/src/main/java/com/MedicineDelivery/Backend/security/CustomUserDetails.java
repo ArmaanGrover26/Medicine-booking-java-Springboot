@@ -3,6 +3,7 @@ package com.MedicineDelivery.Backend.security;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.MedicineDelivery.Backend.model.User;
 
 public class CustomUserDetails implements UserDetails {
+
+    // FIX: Required because UserDetails extends Serializable.
+    // Prevents Java compiler warning about missing serialVersionUID.
+    private static final long serialVersionUID = 1L;
 
     private final User user;
 
@@ -22,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
