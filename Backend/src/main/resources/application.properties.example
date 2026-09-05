@@ -1,0 +1,23 @@
+# application.properties — TEMPLATE (safe to commit)
+# Copy this file to application.properties and fill in real values.
+# application.properties is gitignored — never commit it.
+
+spring.application.name=Backend
+
+# MySQL Database Configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/Medicine?useSSL=false&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=YOUR_DB_PASSWORD_HERE
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA & Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+
+# JWT Secret — must be a Base64-encoded string of at least 32 bytes
+jwt.secret=YOUR_BASE64_JWT_SECRET_HERE
+
+# Logging (use WARN in production, DEBUG only in development)
+logging.level.org.springframework.security=WARN
+logging.level.org.springframework.web=WARN
+logging.level.org.hibernate.SQL=WARN
+logging.level.com.MedicineDelivery.Backend=INFO

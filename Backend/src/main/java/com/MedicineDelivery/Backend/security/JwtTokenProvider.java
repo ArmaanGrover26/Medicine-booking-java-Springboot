@@ -28,14 +28,15 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        // FIX: Removed deprecated Jwts.claims() / setClaims() / SignatureAlgorithm.HS256.
+        // FIX: Removed deprecated Jwts.claims() / setClaims() /
+        // SignatureAlgorithm.HS256.
         // The algorithm is automatically inferred from the Key type (HMAC-SHA256).
         return Jwts.builder()
-            .setSubject(userDetails.getUsername())
-            .setIssuedAt(now)
-            .setExpiration(validity)
-            .signWith(key)  // Algorithm inferred automatically from key — no SignatureAlgorithm needed
-            .compact();
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key) // Algorithm inferred automatically from key — no SignatureAlgorithm needed
+                .compact();
     }
 
     public String getUsername(String token) {
@@ -57,9 +58,9 @@ public class JwtTokenProvider {
 
     private Claims getAllClaims(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

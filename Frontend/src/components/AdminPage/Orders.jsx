@@ -51,25 +51,25 @@ const Orders = () => {
       alert("Failed to update status. Please try again.");
     }
   };
-  
+
   const handleEditClick = (order) => {
     setSelectedOrder(order);
     setIsModalOpen(true);
   };
-  
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedOrder(null);
   };
-  
+
   // --- UPDATED: Filter logic now works with the real data structure ---
   const filteredOrders = orders.filter(order => {
     const searchLower = searchTerm.toLowerCase();
-    const matchesSearch = 
-        order.shippingName.toLowerCase().includes(searchLower) ||
-        String(order.id).includes(searchLower) ||
-        // Search through all product names in the order
-        order.orderItems.some(item => item.productName.toLowerCase().includes(searchLower));
+    const matchesSearch =
+      order.shippingName.toLowerCase().includes(searchLower) ||
+      String(order.id).includes(searchLower) ||
+      // Search through all product names in the order
+      order.orderItems.some(item => item.productName.toLowerCase().includes(searchLower));
 
     const matchesStatus = statusFilter === 'All Status' || order.status === statusFilter;
     return matchesSearch && matchesStatus;
@@ -123,11 +123,11 @@ const Orders = () => {
           <div className="filters">
             <div className="search-bar">
               <FaSearch className="search-icon" />
-              <input 
-                type="text" 
-                placeholder="Search by ID, customer, or product..." 
-                value={searchTerm} 
-                onChange={(e) => setSearchTerm(e.target.value)} 
+              <input
+                type="text"
+                placeholder="Search by ID, customer, or product..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <select

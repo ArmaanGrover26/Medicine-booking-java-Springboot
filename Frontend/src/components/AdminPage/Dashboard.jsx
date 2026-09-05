@@ -26,7 +26,7 @@ const Dashboard = () => {
           axios.get(`${API_BASE_URL}/orders`),
           axios.get(`${API_BASE_URL}/users`)
         ]);
-        
+
         setOrders(ordersResponse.data);
         setUsers(usersResponse.data);
 
@@ -42,13 +42,13 @@ const Dashboard = () => {
   }, []); // The empty array [] means this effect runs only once
 
   // --- Live Data Calculations ---
-  
+
   // Calculate total revenue from the fetched orders
   const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0).toFixed(2);
-  
+
   // Get the total number of customers (users)
   const totalCustomers = users.length;
-  
+
   // Sort orders by date (most recent first) and take the last 4
   const recentOrders = orders
     .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
@@ -73,7 +73,7 @@ const Dashboard = () => {
         totalRevenue={totalRevenue}
         totalCustomers={totalCustomers}
         // You can add a 'medicines' endpoint later to get a real out-of-stock count
-        outOfStock={0} 
+        outOfStock={0}
       />
       <RecentOrdersTable orders={recentOrders} />
     </div>

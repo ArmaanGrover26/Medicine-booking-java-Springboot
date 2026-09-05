@@ -43,15 +43,15 @@ const Customers = () => {
       console.error("Failed to update status:", err); // For better debugging
     }
   };
-  
+
   const filteredCustomers = customers.filter(customer =>
     customer.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   const totalCustomers = customers.length;
   const activeCustomers = customers.filter(c => !c.blocked).length;
-  
+
   if (loading) return <div className="customers-container"><p>Loading customers...</p></div>;
   if (error) return <div className="customers-container"><p>Error: {error}</p></div>;
 
@@ -90,11 +90,11 @@ const Customers = () => {
           <h2>Customer List</h2>
           <div className="search-bar">
             <FaSearch className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search customers..." 
-              value={searchTerm} 
-              onChange={(e) => setSearchTerm(e.target.value)} 
+            <input
+              type="text"
+              placeholder="Search customers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>

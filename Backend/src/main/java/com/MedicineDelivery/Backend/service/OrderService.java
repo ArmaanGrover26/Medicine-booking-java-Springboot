@@ -24,14 +24,16 @@ public class OrderService {
 
     /**
      * Creates and saves a new order for a specific user.
+     * 
      * @param userId The ID of the user placing the order.
-     * @param order The Order object containing items and shipping details.
+     * @param order  The Order object containing items and shipping details.
      * @return The saved Order.
      */
     @Transactional
     public Order createOrder(Long userId, Order order) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId));
 
         order.setUser(user);
 
@@ -44,6 +46,7 @@ public class OrderService {
 
     /**
      * Retrieves all orders for a specific user.
+     * 
      * @param userId The ID of the user.
      * @return A list of the user's orders.
      */
@@ -54,6 +57,7 @@ public class OrderService {
     // --- NEW METHOD FOR ADMIN ---
     /**
      * Retrieves all orders from the database.
+     * 
      * @return A list of all orders.
      */
     public List<Order> getAllOrders() {
@@ -64,15 +68,17 @@ public class OrderService {
     // --- NEW METHOD FOR ADMIN ---
     /**
      * Updates the status of a specific order.
+     * 
      * @param orderId The ID of the order to update.
-     * @param status The new status string (e.g., "Shipped", "Delivered").
+     * @param status  The new status string (e.g., "Shipped", "Delivered").
      * @return The updated Order object.
      */
     @Transactional
     public Order updateOrderStatus(Long orderId, String status) {
         // 1. Find the existing order in the database
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found with id: " + orderId));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found with id: " + orderId));
 
         // 2. Set the new status
         order.setStatus(status);

@@ -48,7 +48,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // Prevents infinite loops when converting user to JSON
     private List<Address> addresses;
-    
+
     // --- NEW ---
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // Prevents infinite loops
@@ -133,4 +133,3 @@ public class User {
         this.orders = orders;
     }
 }
-

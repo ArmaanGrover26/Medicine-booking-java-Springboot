@@ -35,29 +35,32 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(withDefaults())
-            // --- THIS IS THE CRITICAL FIX ---
-            // We MUST disable CSRF for a stateless token-based API.
-            .csrf(csrf -> csrf.disable())
+                .cors(withDefaults())
+                // --- THIS IS THE CRITICAL FIX ---
+                // We MUST disable CSRF for a stateless token-based API.
+                .csrf(csrf -> csrf.disable())
 
-            // Tell Spring Security not to create sessions
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            
-            // Define the authorization rules for our endpoints
-            .authorizeHttpRequests(auth -> auth
-                // Allow anyone to access the login and signup endpoints
-                .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/users").permitAll() 
-                // All other requests to any other endpoint must be authenticated
-                .anyRequest().authenticated()
-            );
+                // Tell Spring Security not to create sessions
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // Define the authorization rules for our endpoints
+                .authorizeHttpRequests(auth -> auth
+                        // Allow anyone to access the login and signup endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        // Admin routes — auth is handled on the frontend (sessionStorage),
+                        // there is no admin JWT, so we permit the backend endpoints directly.
+                        .requestMatchers("/api/admin/**").permitAll()
+                        // All other requests to any other endpoint must be authenticated
+                        .anyRequest().authenticated());
 
         // Add our custom JWT filter to run before the standard authentication filter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -68,14 +71,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173")); 
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         // Apply this CORS configuration to all paths in our API
-        source.registerCorsConfiguration("/**", configuration); 
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
