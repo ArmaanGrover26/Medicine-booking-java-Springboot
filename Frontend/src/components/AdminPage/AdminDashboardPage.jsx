@@ -31,7 +31,7 @@ const initialCustomers = [
   { id: 'CUST-005', name: 'David Wilson', email: 'd.wilson@email.com', phone: '+1 234 567 8904', address: '654 Maple Dr, City, State 12345', totalOrders: 7, lastOrder: '2024-12-15', status: 'Inactive' },
 ];
 
-function AdminDashboardPage() {
+function AdminDashboardPage({ onLogout }) {
   const [currentPage, setCurrentPage] = useState('dashboard');
   const [orders, setOrders] = useState(initialOrders);
   const [medicines, setMedicines] = useState(initialMedicines);
@@ -54,7 +54,7 @@ function AdminDashboardPage() {
 
   return (
     <div className="app-container">
-      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} onLogout={onLogout} />
       {renderPage()}
     </div>
   );

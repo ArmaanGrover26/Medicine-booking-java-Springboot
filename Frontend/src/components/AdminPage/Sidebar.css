@@ -5,7 +5,39 @@
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   flex-shrink: 0; /* Ensures the sidebar does not shrink */
+  display: flex;
+  flex-direction: column;
 }
+
+.sidebar-menu {
+  flex: 1;
+}
+
+.sidebar-footer {
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: #e74c3c;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #fdecea;
+}
+
 
 .logo-container {
   display: flex;

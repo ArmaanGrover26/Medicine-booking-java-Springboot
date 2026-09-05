@@ -8,7 +8,7 @@ dist/
 dist-ssr/
 build/
 
-# Environment variables
+# Environment variables — NEVER commit these
 .env
 .env.local
 .env.development.local

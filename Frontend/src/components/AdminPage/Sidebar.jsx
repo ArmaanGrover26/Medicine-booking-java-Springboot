@@ -1,9 +1,16 @@
 import React from 'react';
 import './Sidebar.css';
-import { FaTachometerAlt, FaBoxes, FaUser, FaClipboardList, FaCog, FaHeartbeat } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaTachometerAlt, FaBoxes, FaUser, FaClipboardList, FaHeartbeat, FaSignOutAlt } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Sidebar = ({ currentPage, setCurrentPage }) => {
+const Sidebar = ({ currentPage, setCurrentPage, onLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (onLogout) onLogout();
+    navigate('/admin/login');
+  };
+
   return (
     <div className="sidebar">
       <div className="logo-container">
@@ -31,8 +38,13 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
           <div className="menu-icon"><FaUser /></div>
           Customers
         </li>
-        
       </ul>
+      <div className="sidebar-footer">
+        <button className="logout-button" onClick={handleLogout}>
+          <FaSignOutAlt className="menu-icon" />
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

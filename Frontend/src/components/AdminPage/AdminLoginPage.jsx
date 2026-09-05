@@ -16,9 +16,13 @@ const AdminLoginPage = ({ onLogin }) => {
     e.preventDefault();
     setError('');
 
-    // Hardcoded credentials for demonstration
-    if (username === 'admin' && password === 'password123') {
-      onLogin(); // Call the login function passed from App.jsx
+    // Credentials are loaded from environment variables (see Frontend/.env)
+    // Never hardcode credentials in source code
+    const adminUser = import.meta.env.VITE_ADMIN_USERNAME || 'admin';
+    const adminPass = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+
+    if (username === adminUser && password === adminPass) {
+      onLogin();
       navigate('/admin');
     } else {
       setError('Invalid username or password');

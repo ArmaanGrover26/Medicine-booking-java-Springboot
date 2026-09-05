@@ -28,17 +28,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 @Override
 protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
-    
+
     String jwt = getJwtFromRequest(request);
 
     if (StringUtils.hasText(jwt)) {
-        // This line will now throw the real error if something is wrong
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(tokenProvider.getUsername(jwt));
-        
-        if (tokenProvider.validateToken(jwt, userDetails)) {
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            // Validate the token FIRST before doing any DB lookup
+            String username = tokenProvider.getUsername(jwt);
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+
+            if (tokenProvider.validateToken(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (Exception ex) {
+            // Any invalid/expired/malformed JWT: log it and continue unauthenticated.
+            // Spring Security's AuthorizationFilter will then deny access to protected routes.
+            logger.warn("Could not set user authentication from JWT token: " + ex.getMessage());
         }
     }
 

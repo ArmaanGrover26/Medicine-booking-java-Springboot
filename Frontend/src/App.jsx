@@ -40,7 +40,21 @@ const AdminProtectedRoute = ({ children, isAdminLoggedIn }) => {
 };
 
 function App() {
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  // Use sessionStorage so admin login survives page refresh but expires when tab is closed
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(
+    () => sessionStorage.getItem('isAdminLoggedIn') === 'true'
+  );
+
+  const handleAdminLogin = () => {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    setIsAdminLoggedIn(true);
+  };
+
+  const handleAdminLogout = () => {
+    sessionStorage.removeItem('isAdminLoggedIn');
+    setIsAdminLoggedIn(false);
+  };
+
 
   return (
     <div className="App">
@@ -93,12 +107,12 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
 
         {/* Admin Routes without Layout */}
-        <Route path="/admin/login" element={<AdminLoginPage onLogin={() => setIsAdminLoggedIn(true)} />} />
+        <Route path="/admin/login" element={<AdminLoginPage onLogin={handleAdminLogin} />} />
         <Route
           path="/admin/*"
           element={
             <AdminProtectedRoute isAdminLoggedIn={isAdminLoggedIn}>
-              <AdminDashboardPage />
+              <AdminDashboardPage onLogout={handleAdminLogout} />
             </AdminProtectedRoute>
           }
         />

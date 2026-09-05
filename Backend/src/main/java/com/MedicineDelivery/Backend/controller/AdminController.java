@@ -41,8 +41,11 @@ public class AdminController {
     public ResponseEntity<User> updateUserStatus(
             @PathVariable Long id,
             @RequestBody Map<String, Boolean> statusUpdate) {
-        boolean isBlocked = statusUpdate.get("blocked");
-        User updatedUser = userService.updateUserBlockedStatus(id, isBlocked);
+        Boolean blockedValue = statusUpdate.get("blocked");
+        if (blockedValue == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        User updatedUser = userService.updateUserBlockedStatus(id, blockedValue);
         return ResponseEntity.ok(updatedUser);
     }
 
